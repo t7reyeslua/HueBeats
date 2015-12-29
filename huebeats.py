@@ -39,6 +39,12 @@ class HueBeats_Daemon(Daemon):
 
 
 def main():
+    if __file__ not in ('huebeats.py', './huebeats.py'):
+        print("The app needs to be run from the root directory " +
+              "(e.g. HueBeats/). It is\nadvisable to use the huebeats.sh " +
+              "script that is provided there.")
+        sys.exit(2)
+
     if len(sys.argv) == 2:
         daemon = HueBeats_Daemon('/tmp/hueBeats.pid')
         if 'start' == sys.argv[1]:
