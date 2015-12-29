@@ -14,14 +14,15 @@ class HueBeats():
     def run(self):
         settings = ConfigParser()
         settings.read('settings.config')
-        hue = HueHandler(settings.get('hue','bridge_ip'),
+        hue = HueHandler(settings.get('hue', 'bridge_ip'),
                          settings.get('hue', 'username'))
         if hue.connected:
-            monitor = PeakMonitor(settings.get('pulseaudio','sink_name'),
-                                  settings.getint('pulseaudio', 'meter_rate'),
-                                  settings.getint('pulseaudio', 'max_sample_value'),
-                                  settings.getint('pulseaudio', 'display_scale'),
-                                  hue)
+            monitor = PeakMonitor(
+                    settings.get('pulseaudio', 'sink_name'),
+                    settings.getint('pulseaudio', 'meter_rate'),
+                    settings.getint('pulseaudio', 'max_sample_value'),
+                    settings.getint('pulseaudio', 'display_scale'),
+                    hue)
             for sample in monitor:
                 pass
         return

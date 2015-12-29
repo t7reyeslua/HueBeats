@@ -11,7 +11,7 @@ class HueHandler(object):
         self.ip = ip
         self.username = username
         self.bridge = Bridge(device={'ip': ip}, user={'name': username})
-        self.connected =  False
+        self.connected = False
         self.connect()
 
     def connect(self):
@@ -31,7 +31,8 @@ class HueHandler(object):
         self.created = False
         print 'Press the button on the Hue bridge'
         while not self.created:
-            resource = {'user':{'devicetype': self.username, 'name': self.username}}
+            resource = {'user': {'devicetype': self.username,
+                                 'name': self.username}}
             response = self.bridge.config.create(resource)['resource']
             if 'error' in response[0]:
                 if response[0]['error']['type'] != 101:
@@ -41,7 +42,7 @@ class HueHandler(object):
                 self.created = True
 
     def getSystemData(self):
-        resource = {'which':'system'}
+        resource = {'which': 'system'}
         return self.bridge.config.get(resource)['resource']
 
     def update_hue(self, light, value):
@@ -49,10 +50,10 @@ class HueHandler(object):
             light = 'all'
         resource = {
             'which': light,
-            'data':{
-                'state':{'on':True,
-                         'sat': 254, 'bri': 200,
-                         'hue':value}
+            'data': {
+                'state': {'on': True,
+                          'sat': 254, 'bri': 200,
+                          'hue': value}
             }
         }
         res = self.bridge.light.update(resource)
@@ -64,8 +65,8 @@ class HueHandler(object):
             light = 'all'
         resource = {
             'which': light,
-            'data':{
-                'state':{'on':True, 'bri': value}
+            'data': {
+                'state': {'on': True, 'bri': value}
             }
         }
         res = self.bridge.light.update(resource)

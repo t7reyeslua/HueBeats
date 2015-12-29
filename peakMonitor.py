@@ -1,7 +1,7 @@
 import sys
 from Queue import Queue
 from ctypes import POINTER, c_ubyte, c_void_p, c_ulong, cast
-#from colorama import Fore, Back, Style
+# from colorama import Fore, Back, Style
 import datetime
 
 # From https://github.com/Valodim/python-pulseaudio
@@ -20,7 +20,8 @@ class PeakMonitor(object):
 
         # Wrap callback methods in appropriate ctypefunc instances so
         # that the Pulseaudio C API can call them
-        self._context_notify_cb = pa_context_notify_cb_t(self.context_notify_cb)
+        self._context_notify_cb = pa_context_notify_cb_t(
+                self.context_notify_cb)
         self._sink_info_cb = pa_sink_info_cb_t(self.sink_info_cb)
         self._stream_read_cb = pa_stream_request_cb_t(self.stream_read_cb)
 
@@ -48,10 +49,11 @@ class PeakMonitor(object):
             print "Pulseaudio connection ready..."
             # Connected to Pulseaudio. Now request that sink_info_cb
             # be called with information about the available sinks.
-            o = pa_context_get_sink_info_list(context, self._sink_info_cb, None)
+            o = pa_context_get_sink_info_list(context,
+                                              self._sink_info_cb, None)
             pa_operation_unref(o)
 
-        elif state == PA_CONTEXT_FAILED :
+        elif state == PA_CONTEXT_FAILED:
             print "Connection failed"
 
         elif state == PA_CONTEXT_TERMINATED:
@@ -62,7 +64,7 @@ class PeakMonitor(object):
             return
 
         sink_info = sink_info_p.contents
-        print '-'* 60
+        print '-' * 60
         print 'index:', sink_info.index
         print 'name:', sink_info.name
         print 'description:', sink_info.description
@@ -71,14 +73,16 @@ class PeakMonitor(object):
             # Found the sink we want to monitor for peak levels.
             # Tell PA to call stream_read_cb with peak samples.
             print
-            print 'setting up peak recording using', sink_info.monitor_source_name
+            print 'setting up peak recording: ', sink_info.monitor_source_name
             print
             samplespec = pa_sample_spec()
             samplespec.channels = 1
             samplespec.format = PA_SAMPLE_U8
             samplespec.rate = self.rate
 
-            pa_stream = pa_stream_new(context, "peak detect demo", samplespec, None)
+            pa_stream = pa_stream_new(context,
+                                      "peak detect demo",
+                                      samplespec, None)
             pa_stream_set_read_callback(pa_stream,
                                         self._stream_read_cb,
                                         sink_info.index)
@@ -110,15 +114,16 @@ class PeakMonitor(object):
         diff1 = abs(sample - self.last)
         self.heartbeat(sample)
         self.last = sample
-        if diff1 > 20 :
+        if diff1 > 20:
             print('| %.2f %3d %3d %s%s\n' % (diff, diff1, sample, bar, spaces))
-        else :
+        else:
             print('| %.2f %3d %3d %s%s\n' % (diff, diff1, sample, bar, spaces))
         return
 
     def heartbeat(self, sample):
         value = int(sample * 255 * 1.0/128)
-        time_delta = (datetime.datetime.utcnow() - self.last_ts).total_seconds()
+        time_delta = (datetime.datetime.utcnow() - self.last_ts)\
+            .total_seconds()
         # Check if cache expired
         if time_delta < .1:
             return
