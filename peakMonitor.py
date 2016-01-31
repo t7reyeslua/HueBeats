@@ -130,4 +130,5 @@ class PeakMonitor(object):
         self.hue.update_brightness(1, value)
         self.hue.update_brightness(2, value)
         self.hue.update_brightness(3, value)
+        self.hue.update_brightness(4, value)
         self.last_ts = datetime.datetime.utcnow()

@@ -7,9 +7,10 @@ from beautifulhue.api import Bridge
 
 class HueHandler(object):
 
-    def __init__(self, ip, username):
+    def __init__(self, ip, username, lights_ids):
         self.ip = ip
         self.username = username
+        self.lights_ids = lights_ids
         self.bridge = Bridge(device={'ip': ip}, user={'name': username})
         self.connected = False
         self.connect()
@@ -71,4 +72,15 @@ class HueHandler(object):
         }
         res = self.bridge.light.update(resource)
         pp(res)
+        return
+
+    def set_state(self, resources):
+        for resource in resources:
+            res = self.bridge.light.update(resource)
+            print(resource)
+        return
+
+    def set_state_group(self, resources):
+        print(resources)
+        res = self.bridge.group.update(resources)
         return
