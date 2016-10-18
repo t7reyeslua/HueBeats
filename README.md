@@ -1,5 +1,5 @@
 # HueBeats
-Script to make Philips Hue lightning system to beat in sync with whatever you are playing in your computer.
+Script to make Philips Hue lightning system to beat in sync with whatever you are playing in your computer. Still WIP.
 
 ## Installation
 To run this project, it is required to install the respective dependencies of the source projects listed below.
